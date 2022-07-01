@@ -9,7 +9,8 @@ set -eou pipefail
 readonly project_name=terraform-gcp-gke-audit-log
 
 TEST_CASES=(
-  examples/default
+  examples/organization-level-gke-audit
+  examples/project-level-gke-audit
 )
 
 log() {
