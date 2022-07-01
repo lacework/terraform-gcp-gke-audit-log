@@ -69,7 +69,7 @@ data "google_storage_project_service_account" "lw" {
 }
 
 resource "google_pubsub_topic_iam_binding" "topic_publisher" {
-  members = ["serviceAccount:${data.google_storage_project_service_account.lw.email_address}"]
+  members = local.logging_sink_writer_identity
   role    = "roles/pubsub.publisher"
   project = local.project_id
   topic   = google_pubsub_topic.lacework_topic.name
@@ -166,7 +166,9 @@ resource "time_sleep" "wait_time" {
     google_pubsub_subscription_iam_binding.lacework,
     module.lacework_gke_svc_account,
     google_project_iam_member.for_lacework_service_account,
-    google_organization_iam_member.for_lacework_service_account
+    google_organization_iam_member.for_lacework_service_account,
+    google_project_iam_audit_config.project_audit_logs,
+    google_organization_iam_audit_config.organization_audit_logs
   ]
 }
 
