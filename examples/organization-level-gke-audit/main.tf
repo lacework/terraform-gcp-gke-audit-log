@@ -2,9 +2,12 @@ provider "google" {}
 
 provider "lacework" {}
 
+variable "organization_id" {
+  default = "my-organization-id"
+}
+
 module "gcp_organization_level_gke_audit_log" {
   source     = "../../"
   integration_type = "ORGANIZATION"
-  project_id = "example-project-123"
-  organization_id = "example-org-123"
+  organization_id = var.organization_id
 }
