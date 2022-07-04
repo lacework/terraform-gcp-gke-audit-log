@@ -22,6 +22,8 @@ e.g. `terraform state rm 'google_project_iam_binding.for_lacework_service_accoun
 
 ```
 roles/pubsub.publisher
+roles/pubsub.subscriber
+roles/browser
 ```
 
 ## Required APIs
@@ -76,7 +78,6 @@ cloudresourcemanager.googleapis.com
 | [random_id.uniq](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [time_sleep.wait_time](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [google_project.selected](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/project) | data source |
-| [google_storage_project_service_account.lw](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/storage_project_service_account) | data source |
 
 ## Inputs
 
@@ -101,6 +102,7 @@ cloudresourcemanager.googleapis.com
 
 | Name | Description |
 |------|-------------|
+| <a name="output_pubsub_subscription_name"></a> [pubsub\_subscription\_name](#output\_pubsub\_subscription\_name) | The PubSub subscription name |
 | <a name="output_pubsub_topic_name"></a> [pubsub\_topic\_name](#output\_pubsub\_topic\_name) | The PubSub topic name |
 | <a name="output_service_account_name"></a> [service\_account\_name](#output\_service\_account\_name) | The Service Account name |
 | <a name="output_service_account_private_key"></a> [service\_account\_private\_key](#output\_service\_account\_private\_key) | The private key in JSON format, base64 encoded |

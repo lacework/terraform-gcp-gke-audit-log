@@ -56,18 +56,6 @@ resource "google_pubsub_topic" "lacework_topic" {
   labels     = merge(var.labels, var.pubsub_topic_labels)
 }
 
-# By calling this data source we are accessing the storage service
-# account and therefore, Google will created for us. If we don't
-# ask for it, Google doesn't create it by default, more docs at:
-# => https://cloud.google.com/storage/docs/projects#service-accounts
-#
-# If the service account is not there, we could add a local-exec
-# provisioner to call an API that is documented at:
-# => https://cloud.google.com/storage-transfer/docs/reference/rest/v1/googleServiceAccounts/get
-data "google_storage_project_service_account" "lw" {
-  project = local.project_id
-}
-
 resource "google_pubsub_topic_iam_binding" "topic_publisher" {
   members = local.logging_sink_writer_identity
   role    = "roles/pubsub.publisher"
@@ -118,14 +106,14 @@ resource "google_pubsub_subscription_iam_binding" "lacework" {
 
 resource "google_project_iam_member" "for_lacework_service_account" {
   project = local.project_id
-  role    = "roles/storage.objectViewer"
+  role    = "roles/browser"
   member  = "serviceAccount:${local.service_account_json_key.client_email}"
 }
 
 resource "google_organization_iam_member" "for_lacework_service_account" {
   count  = local.org_integration ? 1 : 0
   org_id = var.organization_id
-  role   = "roles/resourcemanager.organizationViewer"
+  role   = "roles/browser"
   member = "serviceAccount:${local.service_account_json_key.client_email}"
 }
 
