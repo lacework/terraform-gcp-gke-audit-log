@@ -23,7 +23,6 @@ e.g. `terraform state rm 'google_project_iam_binding.for_lacework_service_accoun
 ```
 roles/pubsub.publisher
 roles/pubsub.subscriber
-roles/browser
 ```
 
 ## Required APIs
@@ -66,9 +65,7 @@ cloudresourcemanager.googleapis.com
 | [google_logging_organization_sink.lacework_organization_sink](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/logging_organization_sink) | resource |
 | [google_logging_project_sink.lacework_project_sink](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/logging_project_sink) | resource |
 | [google_organization_iam_audit_config.organization_audit_logs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_audit_config) | resource |
-| [google_organization_iam_member.for_lacework_service_account](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_member) | resource |
 | [google_project_iam_audit_config.project_audit_logs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_audit_config) | resource |
-| [google_project_iam_member.for_lacework_service_account](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_service.required_apis](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
 | [google_pubsub_subscription.lacework_subscription](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_subscription) | resource |
 | [google_pubsub_subscription_iam_binding.lacework](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/pubsub_subscription_iam_binding) | resource |
