@@ -16,7 +16,7 @@ provider "google" {}
 provider "lacework" {}
 
 module "gcp_project_level_gke_audit" {
-  source           = "lacework/audit-log/gcp"
+  source           = "lacework/gke-audit-log/gcp"
   version          = "~> 0.1"
   integration_type = "PROJECT"
   project_id       = "example-project-123"
