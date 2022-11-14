@@ -1,6 +1,6 @@
 locals {
   org_integration = var.integration_type == "ORGANIZATION"
-  project_id = data.google_project.selected.project_id
+  project_id      = length(var.project_id) > 0 ? var.project_id : data.google_project.selected.project_id
   sink_name = length(var.existing_sink_name) > 0 ? var.existing_sink_name : (
     local.org_integration ? "${var.prefix}-${var.organization_id}-lacework-sink-${random_id.uniq.hex}" : "${var.prefix}-lacework-sink-${random_id.uniq.hex}"
   )
@@ -29,9 +29,7 @@ resource "random_id" "uniq" {
   byte_length = 4
 }
 
-data "google_project" "selected" {
-  project_id = var.project_id
-}
+data "google_project" "selected" {}
 
 resource "google_project_service" "required_apis" {
   for_each = var.required_apis
@@ -57,10 +55,10 @@ resource "google_pubsub_topic" "lacework_topic" {
 }
 
 resource "google_pubsub_topic_iam_binding" "topic_publisher" {
-  members = local.logging_sink_writer_identity
-  role    = "roles/pubsub.publisher"
-  project = local.project_id
-  topic   = google_pubsub_topic.lacework_topic.name
+  members    = local.logging_sink_writer_identity
+  role       = "roles/pubsub.publisher"
+  project    = local.project_id
+  topic      = google_pubsub_topic.lacework_topic.name
   depends_on = [google_pubsub_topic.lacework_topic]
 }
 
@@ -71,7 +69,7 @@ resource "google_pubsub_subscription" "lacework_subscription" {
   ack_deadline_seconds       = 300
   message_retention_duration = "432000s"
   labels                     = merge(var.labels, var.pubsub_subscription_labels)
-  depends_on = [google_pubsub_topic.lacework_topic]
+  depends_on                 = [google_pubsub_topic.lacework_topic]
 }
 
 resource "google_logging_project_sink" "lacework_project_sink" {
@@ -81,7 +79,7 @@ resource "google_logging_project_sink" "lacework_project_sink" {
   destination            = "pubsub.googleapis.com/${google_pubsub_topic.lacework_topic.id}"
   unique_writer_identity = true
 
-  filter = local.log_filter
+  filter     = local.log_filter
   depends_on = [google_pubsub_topic.lacework_topic]
 }
 
@@ -92,7 +90,7 @@ resource "google_logging_organization_sink" "lacework_organization_sink" {
   destination      = "pubsub.googleapis.com/${google_pubsub_topic.lacework_topic.id}"
   include_children = true
 
-  filter = local.log_filter
+  filter     = local.log_filter
   depends_on = [google_pubsub_topic.lacework_topic]
 }
 
@@ -101,7 +99,7 @@ resource "google_pubsub_subscription_iam_binding" "lacework" {
   role         = "roles/pubsub.subscriber"
   members      = ["serviceAccount:${local.service_account_json_key.client_email}"]
   subscription = google_pubsub_subscription.lacework_subscription.name
-  depends_on = [google_pubsub_subscription.lacework_subscription]
+  depends_on   = [google_pubsub_subscription.lacework_subscription]
 }
 
 resource "google_project_iam_audit_config" "project_audit_logs" {
@@ -119,8 +117,8 @@ resource "google_project_iam_audit_config" "project_audit_logs" {
 }
 
 resource "google_organization_iam_audit_config" "organization_audit_logs" {
-  count = local.org_integration ? 1 : 0
-  org_id = var.organization_id
+  count   = local.org_integration ? 1 : 0
+  org_id  = var.organization_id
   service = "container.googleapis.com"
   audit_log_config {
     log_type = "ADMIN_READ"
