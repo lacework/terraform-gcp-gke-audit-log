@@ -80,6 +80,31 @@ resource "google_logging_project_sink" "lacework_project_sink" {
   unique_writer_identity = true
 
   filter     = local.log_filter
+
+  exclusions {
+    name = "livezexclusion"
+    description = "Exclude livez logs"
+    filter = "protoPayload.resourceName=\"livez\" "
+  }
+
+  exclusions {
+    name = "readyzexclusion"
+    description = "Exclude readyz logs"
+    filter = "protoPayload.resourceName=\"readyz\" "
+  }
+
+  exclusions {
+    name = "metricsexclusion"
+    description = "Exclude metrics logs"
+    filter = "protoPayload.resourceName=\"metrics\" "
+  }
+
+  exclusions {
+    name = "clustermetricsexclusion"
+    description = "Exclude cluster metrics logs"
+    filter = "protoPayload.resourceName=\"core/v1/namespaces/kube-system/configmaps/clustermetrics\" "
+  }
+
   depends_on = [google_pubsub_topic.lacework_topic]
 }
 
@@ -91,6 +116,31 @@ resource "google_logging_organization_sink" "lacework_organization_sink" {
   include_children = true
 
   filter     = local.log_filter
+
+  exclusions {
+    name = "livezexclusion"
+    description = "Exclude livez logs"
+    filter = "protoPayload.resourceName=\"livez\" "
+  }
+
+  exclusions {
+    name = "readyzexclusion"
+    description = "Exclude readyz logs"
+    filter = "protoPayload.resourceName=\"readyz\" "
+  }
+
+  exclusions {
+    name = "metricsexclusion"
+    description = "Exclude metrics logs"
+    filter = "protoPayload.resourceName=\"metrics\" "
+  }
+
+  exclusions {
+    name = "clustermetricsexclusion"
+    description = "Exclude cluster metrics logs"
+    filter = "protoPayload.resourceName=\"core/v1/namespaces/kube-system/configmaps/clustermetrics\" "
+  }
+
   depends_on = [google_pubsub_topic.lacework_topic]
 }
 
