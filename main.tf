@@ -1,6 +1,6 @@
 locals {
   org_integration = var.integration_type == "ORGANIZATION"
-  project_id      = length(var.project_id) > 0 ? var.project_id : data.google_project.selected.project_id
+  project_id      = length(var.project_id) > 0 ? var.project_id : data.google_project.selected[0].project_id
   sink_name = length(var.existing_sink_name) > 0 ? var.existing_sink_name : (
     local.org_integration ? "${var.prefix}-${var.organization_id}-lacework-sink-${random_id.uniq.hex}" : "${var.prefix}-lacework-sink-${random_id.uniq.hex}"
   )
@@ -29,7 +29,9 @@ resource "random_id" "uniq" {
   byte_length = 4
 }
 
-data "google_project" "selected" {}
+data "google_project" "selected" {
+  count = length(var.project_id) > 0 ? 0 : 1
+}
 
 resource "google_project_service" "required_apis" {
   for_each = var.required_apis
@@ -79,30 +81,30 @@ resource "google_logging_project_sink" "lacework_project_sink" {
   destination            = "pubsub.googleapis.com/${google_pubsub_topic.lacework_topic.id}"
   unique_writer_identity = true
 
-  filter     = local.log_filter
+  filter = local.log_filter
 
   exclusions {
-    name = "livezexclusion"
+    name        = "livezexclusion"
     description = "Exclude livez logs"
-    filter = "protoPayload.resourceName=\"livez\" "
+    filter      = "protoPayload.resourceName=\"livez\" "
   }
 
   exclusions {
-    name = "readyzexclusion"
+    name        = "readyzexclusion"
     description = "Exclude readyz logs"
-    filter = "protoPayload.resourceName=\"readyz\" "
+    filter      = "protoPayload.resourceName=\"readyz\" "
   }
 
   exclusions {
-    name = "metricsexclusion"
+    name        = "metricsexclusion"
     description = "Exclude metrics logs"
-    filter = "protoPayload.resourceName=\"metrics\" "
+    filter      = "protoPayload.resourceName=\"metrics\" "
   }
 
   exclusions {
-    name = "clustermetricsexclusion"
+    name        = "clustermetricsexclusion"
     description = "Exclude cluster metrics logs"
-    filter = "protoPayload.resourceName=\"core/v1/namespaces/kube-system/configmaps/clustermetrics\" "
+    filter      = "protoPayload.resourceName=\"core/v1/namespaces/kube-system/configmaps/clustermetrics\" "
   }
 
   depends_on = [google_pubsub_topic.lacework_topic]
@@ -115,30 +117,30 @@ resource "google_logging_organization_sink" "lacework_organization_sink" {
   destination      = "pubsub.googleapis.com/${google_pubsub_topic.lacework_topic.id}"
   include_children = true
 
-  filter     = local.log_filter
+  filter = local.log_filter
 
   exclusions {
-    name = "livezexclusion"
+    name        = "livezexclusion"
     description = "Exclude livez logs"
-    filter = "protoPayload.resourceName=\"livez\" "
+    filter      = "protoPayload.resourceName=\"livez\" "
   }
 
   exclusions {
-    name = "readyzexclusion"
+    name        = "readyzexclusion"
     description = "Exclude readyz logs"
-    filter = "protoPayload.resourceName=\"readyz\" "
+    filter      = "protoPayload.resourceName=\"readyz\" "
   }
 
   exclusions {
-    name = "metricsexclusion"
+    name        = "metricsexclusion"
     description = "Exclude metrics logs"
-    filter = "protoPayload.resourceName=\"metrics\" "
+    filter      = "protoPayload.resourceName=\"metrics\" "
   }
 
   exclusions {
-    name = "clustermetricsexclusion"
+    name        = "clustermetricsexclusion"
     description = "Exclude cluster metrics logs"
-    filter = "protoPayload.resourceName=\"core/v1/namespaces/kube-system/configmaps/clustermetrics\" "
+    filter      = "protoPayload.resourceName=\"core/v1/namespaces/kube-system/configmaps/clustermetrics\" "
   }
 
   depends_on = [google_pubsub_topic.lacework_topic]
