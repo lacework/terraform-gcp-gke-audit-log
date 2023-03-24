@@ -56,11 +56,15 @@ resource "google_pubsub_topic" "lacework_topic" {
   labels     = merge(var.labels, var.pubsub_topic_labels)
 }
 
+data "google_storage_project_service_account" "lw" {
+  project = local.project_id
+}
+
 resource "google_pubsub_topic_iam_binding" "topic_publisher" {
-  members    = local.logging_sink_writer_identity
-  role       = "roles/pubsub.publisher"
-  project    = local.project_id
-  topic      = google_pubsub_topic.lacework_topic.name
+  members = ["serviceAccount:${data.google_storage_project_service_account.lw.email_address}"]
+  role    = "roles/pubsub.publisher"
+  project = local.project_id
+  topic   = google_pubsub_topic.lacework_topic.name
   depends_on = [google_pubsub_topic.lacework_topic]
 }
 
