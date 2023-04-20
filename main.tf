@@ -4,7 +4,7 @@ locals {
   sink_name = length(var.existing_sink_name) > 0 ? var.existing_sink_name : (
     local.org_integration ? "${var.prefix}-${var.organization_id}-lacework-sink-${random_id.uniq.hex}" : "${var.prefix}-lacework-sink-${random_id.uniq.hex}"
   )
-  logging_sink_writer_identity = length(var.existing_sink_name) > 0 ? null : (
+  logging_sink_writer_identity = length(var.existing_sink_name) > 0 ? ["serviceAccount:${local.service_account_json_key.client_email}"] : (
     (local.org_integration) ? (
       [google_logging_organization_sink.lacework_organization_sink[0].writer_identity]
       ) : (
@@ -61,7 +61,7 @@ data "google_storage_project_service_account" "lw" {
 }
 
 resource "google_pubsub_topic_iam_binding" "topic_publisher" {
-  members = ["serviceAccount:${data.google_storage_project_service_account.lw.email_address}"]
+  members = local.logging_sink_writer_identity
   role    = "roles/pubsub.publisher"
   project = local.project_id
   topic   = google_pubsub_topic.lacework_topic.name
