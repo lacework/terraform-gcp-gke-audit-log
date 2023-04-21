@@ -1,8 +1,7 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v0.4.1`.
+Another day, another release. These are the release notes for the version `v0.4.2`.
 
 ## Bug Fixes
-* fix: fix null members in google_pubsub_topic_iam_binding resource (Darren Murray)([676ac67](https://github.com/lacework/terraform-gcp-gke-audit-log/commit/676ac67322f6ded88ada07f8b1734dfc34333816))
-* fix: project_id regex made consistent (#13) (djmctavish)([9446125](https://github.com/lacework/terraform-gcp-gke-audit-log/commit/9446125e1e5eb914a265688ef13df4a1410c4d79))
+* fix: re-implement logging_sink_writer_identity with default (#16) (Ross)([525464a](https://github.com/lacework/terraform-gcp-gke-audit-log/commit/525464a671deb28afbc0032e76c987b22cc10e1c))
 ## Other Changes
-* ci: version bump to v0.4.1-dev (Lacework)([a399a6e](https://github.com/lacework/terraform-gcp-gke-audit-log/commit/a399a6e8a88553a8495098b4b901e71783efe05c))
+* ci: version bump to v0.4.2-dev (Lacework)([83a26c6](https://github.com/lacework/terraform-gcp-gke-audit-log/commit/83a26c6c41289deecff33a4e8714398e310a1871))
