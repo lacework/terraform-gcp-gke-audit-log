@@ -82,6 +82,7 @@ cloudresourcemanager.googleapis.com
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_existing_sink_name"></a> [existing\_sink\_name](#input\_existing\_sink\_name) | The name of an existing sink to be re-used for this integration | `string` | `""` | no |
+ <a name="input_exclusion_filters"></a> [exclusion\_filters](#input\_exclusion\_filters) | Optional list of exclusion filters that can be passed to the integration to reduce logs | <pre>list(object({<br>  filter = string<br>  name  = string<br>  description = string<br>}))</pre> | `[]` | no |
 | <a name="input_integration_type"></a> [integration\_type](#input\_integration\_type) | Specify the integration type. Can only be PROJECT or ORGANIZATION. Defaults to PROJECT | `string` | `"PROJECT"` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | Set of labels which will be added to the resources managed by the module | `map(string)` | `{}` | no |
 | <a name="input_lacework_integration_name"></a> [lacework\_integration\_name](#input\_lacework\_integration\_name) | n/a | `string` | `"TF gke_audit_log"` | no |

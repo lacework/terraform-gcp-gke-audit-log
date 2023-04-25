@@ -86,7 +86,8 @@ resource "google_logging_project_sink" "lacework_project_sink" {
   unique_writer_identity = true
 
   filter = local.log_filter
-
+  
+  # Standard exclusion filters
   exclusions {
     name        = "livezexclusion"
     description = "Exclude livez logs"
@@ -109,6 +110,16 @@ resource "google_logging_project_sink" "lacework_project_sink" {
     name        = "clustermetricsexclusion"
     description = "Exclude cluster metrics logs"
     filter      = "protoPayload.resourceName=\"core/v1/namespaces/kube-system/configmaps/clustermetrics\" "
+  }
+
+  # Additional user defined filters to exclude
+  dynamic "exclusions" {
+    for_each = var.exclusion_filters      
+    content {
+        name        = exclusions.value["name"]
+        description = exclusions.value["description"]
+        filter      = exclusions.value["filter"]
+    }
   }
 
   depends_on = [google_pubsub_topic.lacework_topic]
@@ -146,6 +157,17 @@ resource "google_logging_organization_sink" "lacework_organization_sink" {
     description = "Exclude cluster metrics logs"
     filter      = "protoPayload.resourceName=\"core/v1/namespaces/kube-system/configmaps/clustermetrics\" "
   }
+
+# Additional user defined filters to exclude
+  dynamic "exclusions" {
+    for_each = var.exclusion_filters      
+    content {
+        name        = exclusions.value["name"]
+        description = exclusions.value["description"]
+        filter      = exclusions.value["filter"]
+    }
+  }
+
 
   depends_on = [google_pubsub_topic.lacework_topic]
 }

@@ -92,3 +92,13 @@ variable "pubsub_subscription_labels" {
   default     = {}
   description = "Set of labels which will be added to the subscription"
 }
+
+variable "exclusion_filters" {
+  type = list(object({
+    filter      = string
+    name        = string
+    description = string
+  }))
+  default     = []
+  description = "Set of filters that will be excluded from the audit log"
+} 
