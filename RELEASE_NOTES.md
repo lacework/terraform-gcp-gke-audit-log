@@ -1,7 +1,7 @@
 # Release Notes
-Another day, another release. These are the release notes for the version `v0.4.2`.
+Another day, another release. These are the release notes for the version `v0.5.0`.
 
-## Bug Fixes
-* fix: re-implement logging_sink_writer_identity with default (#16) (Ross)([525464a](https://github.com/lacework/terraform-gcp-gke-audit-log/commit/525464a671deb28afbc0032e76c987b22cc10e1c))
+## Features
+* feat: Addition of optional user supplied exclusion filters (#18) (djmctavish)([f4b059d](https://github.com/lacework/terraform-gcp-gke-audit-log/commit/f4b059dc755d29467fd4ca32db160670c13218b4))
 ## Other Changes
-* ci: version bump to v0.4.2-dev (Lacework)([83a26c6](https://github.com/lacework/terraform-gcp-gke-audit-log/commit/83a26c6c41289deecff33a4e8714398e310a1871))
+* ci: version bump to v0.4.3-dev (Lacework)([f760bbd](https://github.com/lacework/terraform-gcp-gke-audit-log/commit/f760bbddb1c26dcf757ec469495bcef9fc48267e))
