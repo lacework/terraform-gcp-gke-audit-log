@@ -61,10 +61,10 @@ data "google_storage_project_service_account" "lw" {
 }
 
 resource "google_pubsub_topic_iam_binding" "topic_publisher" {
-  members = local.logging_sink_writer_identity
-  role    = "roles/pubsub.publisher"
-  project = local.project_id
-  topic   = google_pubsub_topic.lacework_topic.name
+  members    = local.logging_sink_writer_identity
+  role       = "roles/pubsub.publisher"
+  project    = local.project_id
+  topic      = google_pubsub_topic.lacework_topic.name
   depends_on = [google_pubsub_topic.lacework_topic]
 }
 
@@ -86,7 +86,7 @@ resource "google_logging_project_sink" "lacework_project_sink" {
   unique_writer_identity = true
 
   filter = local.log_filter
-  
+
   # Standard exclusion filters
   exclusions {
     name        = "livezexclusion"
@@ -114,11 +114,11 @@ resource "google_logging_project_sink" "lacework_project_sink" {
 
   # Additional user defined filters to exclude
   dynamic "exclusions" {
-    for_each = var.exclusion_filters      
+    for_each = var.exclusion_filters
     content {
-        name        = exclusions.value["name"]
-        description = exclusions.value["description"]
-        filter      = exclusions.value["filter"]
+      name        = exclusions.value["name"]
+      description = exclusions.value["description"]
+      filter      = exclusions.value["filter"]
     }
   }
 
@@ -158,13 +158,13 @@ resource "google_logging_organization_sink" "lacework_organization_sink" {
     filter      = "protoPayload.resourceName=\"core/v1/namespaces/kube-system/configmaps/clustermetrics\" "
   }
 
-# Additional user defined filters to exclude
+  # Additional user defined filters to exclude
   dynamic "exclusions" {
-    for_each = var.exclusion_filters      
+    for_each = var.exclusion_filters
     content {
-        name        = exclusions.value["name"]
-        description = exclusions.value["description"]
-        filter      = exclusions.value["filter"]
+      name        = exclusions.value["name"]
+      description = exclusions.value["description"]
+      filter      = exclusions.value["filter"]
     }
   }
 
