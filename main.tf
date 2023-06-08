@@ -61,10 +61,10 @@ data "google_storage_project_service_account" "lw" {
 }
 
 resource "google_pubsub_topic_iam_binding" "topic_publisher" {
-  members = local.logging_sink_writer_identity
-  role    = "roles/pubsub.publisher"
-  project = local.project_id
-  topic   = google_pubsub_topic.lacework_topic.name
+  members    = local.logging_sink_writer_identity
+  role       = "roles/pubsub.publisher"
+  project    = local.project_id
+  topic      = google_pubsub_topic.lacework_topic.name
   depends_on = [google_pubsub_topic.lacework_topic]
 }
 
@@ -86,7 +86,7 @@ resource "google_logging_project_sink" "lacework_project_sink" {
   unique_writer_identity = true
 
   filter = local.log_filter
-  
+
   # Standard exclusion filters
   exclusions {
     name        = "livezexclusion"
@@ -114,11 +114,11 @@ resource "google_logging_project_sink" "lacework_project_sink" {
 
   # Additional user defined filters to exclude
   dynamic "exclusions" {
-    for_each = var.exclusion_filters      
+    for_each = var.exclusion_filters
     content {
-        name        = exclusions.value["name"]
-        description = exclusions.value["description"]
-        filter      = exclusions.value["filter"]
+      name        = exclusions.value["name"]
+      description = exclusions.value["description"]
+      filter      = exclusions.value["filter"]
     }
   }
 
@@ -158,13 +158,13 @@ resource "google_logging_organization_sink" "lacework_organization_sink" {
     filter      = "protoPayload.resourceName=\"core/v1/namespaces/kube-system/configmaps/clustermetrics\" "
   }
 
-# Additional user defined filters to exclude
+  # Additional user defined filters to exclude
   dynamic "exclusions" {
-    for_each = var.exclusion_filters      
+    for_each = var.exclusion_filters
     content {
-        name        = exclusions.value["name"]
-        description = exclusions.value["description"]
-        filter      = exclusions.value["filter"]
+      name        = exclusions.value["name"]
+      description = exclusions.value["description"]
+      filter      = exclusions.value["filter"]
     }
   }
 
@@ -215,6 +215,13 @@ resource "google_project_iam_member" "for_lacework_service_account" {
   member  = "serviceAccount:${local.service_account_json_key.client_email}"
 }
 
+resource "google_organization_iam_member" "for_lacework_service_account" {
+  count  = local.org_integration ? 1 : 0
+  org_id = var.organization_id
+  role   = "roles/resourcemanager.organizationViewer"
+  member = "serviceAccount:${local.service_account_json_key.client_email}"
+}
+
 # wait for X seconds for things to settle down in the GCP side
 # before trying to create the Lacework external integration
 resource "time_sleep" "wait_time" {
@@ -224,7 +231,8 @@ resource "time_sleep" "wait_time" {
     module.lacework_gke_svc_account,
     google_project_iam_audit_config.project_audit_logs,
     google_organization_iam_audit_config.organization_audit_logs,
-    google_project_iam_member.for_lacework_service_account
+    google_project_iam_member.for_lacework_service_account,
+    google_organization_iam_member.for_lacework_service_account
   ]
 }
 
