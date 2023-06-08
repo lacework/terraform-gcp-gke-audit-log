@@ -215,6 +215,13 @@ resource "google_project_iam_member" "for_lacework_service_account" {
   member  = "serviceAccount:${local.service_account_json_key.client_email}"
 }
 
+resource "google_organization_iam_member" "for_lacework_service_account" {
+  count  = local.org_integration ? 1 : 0
+  org_id = var.organization_id
+  role   = "roles/resourcemanager.organizationViewer"
+  member = "serviceAccount:${local.service_account_json_key.client_email}"
+}
+
 # wait for X seconds for things to settle down in the GCP side
 # before trying to create the Lacework external integration
 resource "time_sleep" "wait_time" {
@@ -224,7 +231,8 @@ resource "time_sleep" "wait_time" {
     module.lacework_gke_svc_account,
     google_project_iam_audit_config.project_audit_logs,
     google_organization_iam_audit_config.organization_audit_logs,
-    google_project_iam_member.for_lacework_service_account
+    google_project_iam_member.for_lacework_service_account,
+    google_organization_iam_member.for_lacework_service_account
   ]
 }
 
