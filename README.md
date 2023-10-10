@@ -33,7 +33,7 @@ pubsub.googleapis.com
 serviceusage.googleapis.com
 cloudresourcemanager.googleapis.com
 ```
-
+<!-- BEGIN_TF_DOCS -->
 ## Requirements
 
 | Name | Version |
@@ -65,6 +65,7 @@ cloudresourcemanager.googleapis.com
 | [google_logging_organization_sink.lacework_organization_sink](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/logging_organization_sink) | resource |
 | [google_logging_project_sink.lacework_project_sink](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/logging_project_sink) | resource |
 | [google_organization_iam_audit_config.organization_audit_logs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_audit_config) | resource |
+| [google_organization_iam_member.for_lacework_service_account](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/organization_iam_member) | resource |
 | [google_project_iam_audit_config.project_audit_logs](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_audit_config) | resource |
 | [google_project_iam_member.for_lacework_service_account](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_iam_member) | resource |
 | [google_project_service.required_apis](https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/project_service) | resource |
@@ -76,13 +77,14 @@ cloudresourcemanager.googleapis.com
 | [random_id.uniq](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 | [time_sleep.wait_time](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
 | [google_project.selected](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/project) | data source |
+| [google_storage_project_service_account.lw](https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/storage_project_service_account) | data source |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_exclusion_filters"></a> [exclusion\_filters](#input\_exclusion\_filters) | Set of filters that will be excluded from the audit log | <pre>list(object({<br>    filter      = string<br>    name        = string<br>    description = string<br>  }))</pre> | `[]` | no |
 | <a name="input_existing_sink_name"></a> [existing\_sink\_name](#input\_existing\_sink\_name) | The name of an existing sink to be re-used for this integration | `string` | `""` | no |
- <a name="input_exclusion_filters"></a> [exclusion\_filters](#input\_exclusion\_filters) | Optional list of exclusion filters that can be passed to the integration to reduce logs | <pre>list(object({<br>  filter = string<br>  name  = string<br>  description = string<br>}))</pre> | `[]` | no |
 | <a name="input_integration_type"></a> [integration\_type](#input\_integration\_type) | Specify the integration type. Can only be PROJECT or ORGANIZATION. Defaults to PROJECT | `string` | `"PROJECT"` | no |
 | <a name="input_labels"></a> [labels](#input\_labels) | Set of labels which will be added to the resources managed by the module | `map(string)` | `{}` | no |
 | <a name="input_lacework_integration_name"></a> [lacework\_integration\_name](#input\_lacework\_integration\_name) | n/a | `string` | `"TF gke_audit_log"` | no |
@@ -106,3 +108,4 @@ cloudresourcemanager.googleapis.com
 | <a name="output_service_account_name"></a> [service\_account\_name](#output\_service\_account\_name) | The Service Account name |
 | <a name="output_service_account_private_key"></a> [service\_account\_private\_key](#output\_service\_account\_private\_key) | The private key in JSON format, base64 encoded |
 | <a name="output_sink_name"></a> [sink\_name](#output\_sink\_name) | The sink name |
+<!-- END_TF_DOCS -->
