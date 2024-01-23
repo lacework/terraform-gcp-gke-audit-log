@@ -25,7 +25,7 @@ locals {
   log_filter = "protoPayload.@type=\"type.googleapis.com/google.cloud.audit.AuditLog\" AND protoPayload.serviceName = \"k8s.io\""
 
   version_file   = "${abspath(path.module)}/VERSION"
-  module_name    = basename(abspath(path.module))
+  module_name    = "terraform-gcp-gke-audit-log"
   module_version = fileexists(local.version_file) ? file(local.version_file) : ""
 }
 
