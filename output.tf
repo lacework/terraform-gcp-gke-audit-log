@@ -23,3 +23,8 @@ output "sink_name" {
   value       = local.sink_name
   description = "The sink name"
 }
+
+output "lacework_integration_guid" {
+  value = length(lacework_integration_gcp_gke_audit_log.default) > 0 ? lacework_integration_gcp_gke_audit_log.default.intg_guid : null
+  description = "GUID of the created Lacework integration"
+}
